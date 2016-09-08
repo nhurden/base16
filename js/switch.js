@@ -1,24 +1,22 @@
-$(function() {
+(function() {
 
-  function loadTheme(theme) {
-    var themeName = $('a[href="#'+ theme +'"]');
+    var selector = document.getElementById('themeSelector');
+    var defaultTheme = selector.value;
+    var themeLink = document.createElement('link');
+    themeLink.type = 'text/css';
+    themeLink.rel = 'stylesheet';
 
-    if (themeName.length == 0)
-    {
-      theme = 'default';
-      themeName = $('a[href="#'+ theme +'"]');
+    function switchTheme(theme) {
+        themeLink.disabled = true;
+        themeLink.href = './css/' + theme;
+        themeLink.disabled = false;
     }
 
-    $('link.theme').attr('disabled', true);
-    $('link' + '.' + theme).attr('disabled', false);
+    switchTheme(defaultTheme);
 
-    $('.scheme').text('Preview: ' + themeName.text() );
-  }
+    document.getElementsByTagName('head')[0].appendChild(themeLink);
 
-  $(window).hashchange( function(){
-    var theme = location.hash ? location.hash.replace('#', '') : 'default';
-    loadTheme(theme);
-  });
-
-  $(window).hashchange();
-});
+    selector.onchange = function(evt) {
+        switchTheme(evt.currentTarget.value);
+    };
+})();

@@ -1,24 +1,25 @@
-$(function() {
+(function() {
 
-  function loadTheme(theme) {
-    var themeName = $('a[href="#'+ theme +'"]');
+    var selector = document.getElementById('themeSelector');
+    var defaultTheme = selector.value;
+    var themeLink = document.createElement('link');
+    var indicator = document.querySelector('.scheme');
 
-    if (themeName.length == 0)
-    {
-      theme = 'default';
-      themeName = $('a[href="#'+ theme +'"]');
+    themeLink.type = 'text/css';
+    themeLink.rel = 'stylesheet';
+
+    function switchTheme(theme) {
+        indicator.innerHTML = 'Preview: ' + theme.substr(0, theme.length - 4);
+        themeLink.disabled = true;
+        themeLink.href = './css/' + theme;
+        themeLink.disabled = false;
     }
 
-    $('link.theme').attr('disabled', true);
-    $('link' + '.' + theme).attr('disabled', false);
+    switchTheme(defaultTheme);
 
-    $('.scheme').text('Preview: ' + themeName.text() );
-  }
+    document.getElementsByTagName('head')[0].appendChild(themeLink);
 
-  $(window).hashchange( function(){
-    var theme = location.hash ? location.hash.replace('#', '') : 'default';
-    loadTheme(theme);
-  });
-
-  $(window).hashchange();
-});
+    selector.onchange = function(evt) {
+        switchTheme(evt.currentTarget.value);
+    };
+})();
